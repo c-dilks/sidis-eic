@@ -1,5 +1,4 @@
 # Largex-eic
-
 General purpose analysis software for SIDIS at the EIC
 
 This repository provides a set of common tools for the analysis of both full and
