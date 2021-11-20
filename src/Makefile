@@ -1,5 +1,3 @@
-include ../config.mk
-
 # rootcling dictionary
 DICT := $(LARGEX)Dict.cxx
 PCM := $(LARGEX)Dict_rdict.pcm
@@ -13,10 +11,9 @@ HEADERS := $(filter-out $(LINKDEF), $(wildcard *.h) $(wildcard sfset/*.h) $(wild
 
 #-----------------------------------------------
 
-
 $(LARGEXOBJ): $(DICT) $(HEADERS) $(SOURCES)
 	@echo "----- build $@ -----"
-	$(CXX) $(SOURCES) -shared -o ../$@ $(FLAGS) $(DEPS) $(LIBS)
+	$(CXX) $(SOURCES) -shared -o ../$@ $(FLAGS) $(SANFLAGS) $(DEPS) $(LIBS)
 
 $(DICT): $(HEADERS)
 	@echo "----- generate dictionary $@ -----"
@@ -25,3 +22,4 @@ $(DICT): $(HEADERS)
 
 clean:
 	$(RM) ../$(LARGEXOBJ) $(DICT) ../$(PCM)
+

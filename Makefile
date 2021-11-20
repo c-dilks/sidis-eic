@@ -13,11 +13,14 @@ EXES := $(addsuffix .exe, $(SOURCES))
 
 #--------------------------------------------
 
-
+export
 all: 
 	@cd mstwpdf; make
 	@cd src; make
 	make exe
+
+asan: SANFLAGS = -g -fno-omit-frame-pointer -fsanitize=address -static-libasan
+asan: all
 
 exe: $(EXES)
 

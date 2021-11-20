@@ -94,6 +94,10 @@ void AnalysisDD4hep::process_event()
     nevt++;
     if(nevt>maxEvents && maxEvents>0) break;
 
+    // test asan ###########################################
+    //Node *leak = new Node();
+    //###########################################################
+
     // mcparticles loop (generated truth)
     std::vector<Particles> mcpart;
     double maxP = 0;

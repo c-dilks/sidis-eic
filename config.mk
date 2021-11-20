@@ -1,6 +1,6 @@
 # compiler and flags
 CXX = g++
-FLAGS = -g -Wno-deprecated -fPIC -fno-inline -Wno-write-strings
+FLAGS = -Wno-deprecated -fPIC -fno-inline -Wno-write-strings
 FLAGS += -fmax-errors=3
 
 # extra flags for Mac OS

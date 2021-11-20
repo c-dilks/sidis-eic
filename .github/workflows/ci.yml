@@ -39,6 +39,27 @@ jobs:
             mstwpdf/*.so
             src/LargexDict.cxx
 
+# sanitize tests
+  sanitize:
+    needs: [ build ]
+    runs-on: [ ubuntu-latest ]
+    container:
+      image: cjdilks/largex-eic:dev
+      options: --user root
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: config
+        run: |
+          source env.sh
+          echo "MSTWPDF_HOME=${MSTWPDF_HOME}" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MSTWPDF_HOME}" >> $GITHUB_ENV
+      - name: asan
+        env:
+          ASAN_OPTIONS: "detect_leaks=1" # need clang to be able to use `suppressions=${ROOTSYS}/etc/lsan-root.supp`
+          #LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libasan.so.4 # should not be needed! (but we currently need this to run a macro)
+        run: make asan
+
 # run benchmark macros matrix for fast and full simulation
 # - all files in matrix are w.r.t. path macro/ci/
   benchmarks:
