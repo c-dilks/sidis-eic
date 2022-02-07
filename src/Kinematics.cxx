@@ -61,7 +61,7 @@ Kinematics::Kinematics(
   BvecIonBeam.RotateY(rotAboutY);
   // - rotation of beams about x to remove y-components
   rotAboutX = TMath::ATan2( BvecIonBeam.Py(), BvecIonBeam.Pz() );
-
+  
   // default transverse spin (needed for phiS calculation)
   tSpin = 1; // +1=spin-up, -1=spin-down
   lSpin = 1;
@@ -561,6 +561,26 @@ void Kinematics::GetHFS(
 // calculates generated truth hadronic final state variables from DELPHES tree branches
 void Kinematics::GetTrueHFS(TObjArrayIter itParticle){
 
+  BvecBoost = vecEleBeam + vecIonBeam;                                                                                                                              
+  Bboost = -1*BvecBoost.BoostVector();                                                                                                                             
+                                                                                                                                                             
+  OvecBoost.SetXYZT( 0.0, 0.0, BvecBoost[2], BvecBoost[3] );                                                                                                             
+  Oboost = OvecBoost.BoostVector();                                                                                                                            
+                                                                                                                                                                         
+  this->BoostToBeamComFrame(vecEleBeam,BvecEleBeam);                                                                                                                    
+  this->BoostToBeamComFrame(vecIonBeam,BvecIonBeam);                                                                                                                   
+  // - rotation of beams about y to remove x-components                                                                                                                               
+  rotAboutY = -TMath::ATan2( BvecIonBeam.Px(), BvecIonBeam.Pz() );                                                                                                                    
+  BvecEleBeam.RotateY(rotAboutY);                                                                                                                                                  
+  BvecIonBeam.RotateY(rotAboutY);                                                                                                                                            
+  // - rotation of beams about x to remove y-components                                                                                                        
+  rotAboutX = TMath::ATan2( BvecIonBeam.Py(), BvecIonBeam.Pz() );                                                                                                                 
+                                                                                                                                                                                        
+  this->TransformToHeadOnFrame(vecEleBeam,HvecEleBeam); // also not sure if these are getting calculated when they might be needed                                          
+  this->TransformToHeadOnFrame(vecIonBeam,HvecIonBeam);                                                                                                                           
+  //this->TransformToHeadOnFrame(vecElectron,HvecElectron);                                                                                                                        
+  s = (vecEleBeam+vecIonBeam).M2();                                                                                                                                                 
+  
   // resets
   this->ResetHFS();
   itParticle.Reset();

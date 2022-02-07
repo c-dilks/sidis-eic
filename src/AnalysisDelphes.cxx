@@ -81,7 +81,7 @@ void AnalysisDelphes::Execute() {
       eleP = ele->PT * TMath::CosH(ele->Eta);
       if(eleP>maxEleP) {
         maxEleP = eleP;
-        kin->vecElectron.SetPtEtaPhiM(
+	kin->vecElectron.SetPtEtaPhiM(
             ele->PT,
             ele->Eta,
             ele->Phi,
@@ -107,12 +107,24 @@ void AnalysisDelphes::Execute() {
               part->Phi,
               part->Mass
               );
+	  kin->vecElectron.SetPtEtaPhiM(
+              part->PT,
+              part->Eta,
+              part->Phi,
+              part->Mass
+              );
         };
       };
       if(part->PID == 11 && part->Status == 4){
         if(!found_elec){
           found_elec = true;
           kinTrue->vecEleBeam.SetPtEtaPhiM(
+              part->PT,
+              part->Eta,
+              part->Phi,
+              part->Mass
+              );
+	  kin->vecEleBeam.SetPtEtaPhiM(
               part->PT,
               part->Eta,
               part->Phi,
@@ -126,6 +138,12 @@ void AnalysisDelphes::Execute() {
         if(!found_ion){
           found_ion = true;
           kinTrue->vecIonBeam.SetPtEtaPhiM(
+              part->PT,
+              part->Eta,
+              part->Phi,
+              part->Mass
+              );
+	  kin->vecIonBeam.SetPtEtaPhiM(
               part->PT,
               part->Eta,
               part->Phi,
@@ -145,22 +163,21 @@ void AnalysisDelphes::Execute() {
     if(errorCount>=100 && errorCount<1000) { cerr << "ERROR: .... suppressing beam finder errors ...." << endl; errorCount=1000; };
 
     // get hadronic final state variables
-    kin->GetHFS(
-        itTrack,
-        itEFlowTrack,
-        itEFlowPhoton,
-        itEFlowNeutralHadron,
-        itpfRICHTrack,
-        itDIRCepidTrack, itDIRChpidTrack,
-        itBTOFepidTrack, itBTOFhpidTrack,
-        itdualRICHagTrack, itdualRICHcfTrack
-        );
+
+    kin->GetTrueHFS(itParticle);
     kinTrue->GetTrueHFS(itParticle);
 
     // calculate DIS kinematics
     if(!(kin->CalculateDIS(reconMethod))) continue; // reconstructed
-    if(!(kinTrue->CalculateDIS(reconMethod))) continue; // generated (truth)
+    if(!(kinTrue->CalculateDIS("ele"))) continue; // generated (truth)
 
+    //    cout << "rec Q2: " << kin->Q2 << " rec x: " << kin->x << " rec y: " << kin->y << " rec s: " << kin->s << endl;
+    // cout << "true Q2: " << kinTrue->Q2 << " true x: "	<< kinTrue->x << " true y: " << kinTrue->y << " true s: " << kinTrue->s << endl;
+    //cout << "rec Q: " << kin->vecQ.Px() << " " << kin->vecQ.Py() << " " << kin->vecQ.Pz() << " " <<kin->vecQ.E() << endl;
+    //cout << "true Q: " << kinTrue->vecQ.Px() << " " << kinTrue->vecQ.Py() << " " << kinTrue->vecQ.Pz() << " " << kinTrue->vecQ.E() << endl;
+
+
+    //    cout << endl;
     // get vector of jets
     // TODO: should this have an option for clustering method?
     kin->GetJets(itEFlowTrack, itEFlowPhoton, itEFlowNeutralHadron, itParticle);
