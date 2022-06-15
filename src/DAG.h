@@ -63,7 +63,7 @@ class DAG : public TObject
     template<class O1, class O2>
     void Subloop(std::vector<TString> layers, O1 opBefore, O2 opAfter) {
       if(layers.size()==0) {
-        std::cerr << "ERROR: empty layers list in HistosDAG::Subloop" << std::endl;
+        std::cerr << "ERROR: empty layers list in DAG::Subloop" << std::endl;
         return;
       };
       bool first = true;
@@ -119,7 +119,7 @@ class DAG : public TObject
     template<class O1, class O2, class O3>
     void MultiLeafOp(std::vector<TString> layers, O1 opLeaf, O2 opBefore, O3 opAfter) {
       if(layers.size()==0) {
-        std::cerr << "ERROR: empty layers list in HistosDAG::MultiLeafOp" << std::endl;
+        std::cerr << "ERROR: empty layers list in DAG::MultiLeafOp" << std::endl;
         return;
       };
       // count how many multi-control nodes exist for the first layer in `layers`

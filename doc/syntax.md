@@ -1,6 +1,6 @@
 # Adage Syntax
 
-Here is a reference guide for the Adage functions. These are implemented in the `DAG` base class and the `HistosDAG` derived class
+Here is a reference guide for the Adage functions. These are implemented in the `DAG` base class and the `Adage` derived class
 
 ## Root Operators
 
@@ -24,7 +24,7 @@ Outbound root lambda. Allowed `O` lambdas are standard (as listed above).
 
 ### `template<class O> void Payload(O op)`
 
-Payload operator, staged on the leaf node. Since there is no difference between inbound and outbound lambdas on the leaf node, only one staging template function is provided. This `Payload` function is meant to be used on `HistosDAG` to act on the stored `Histos` objects.
+Payload operator, staged on the leaf node. Since there is no difference between inbound and outbound lambdas on the leaf node, only one staging template function is provided. This `Payload` function is meant to be used on `Adage` to act on the stored `Histos` objects.
 
 Allowed `O` lambdas are of the form:
 - `std::function<void(Histos*)>` (implement in your code as `auto op = [/*captures*/](Histos *H){ /*body*/ }`; this is the most common use case)
@@ -37,7 +37,7 @@ Similar to the standard set, all of these return `void`. The first lambda includ
 
 ### `template<class O> void LeafOp(O op)`
 
-Low-level function to stage a standard lambda `O` on the leaf operator. It is likely you will find `Payload` much more useful. `LeafOp` is wrapped by `Payload` via a standard lambda function which calls `HistosDAG::GetHistos(NodePath*)` to access the `Histos` object in the current multi-dimensional bin specified by the `NodePath` pointer.
+Low-level function to stage a standard lambda `O` on the leaf operator. It is likely you will find `Payload` much more useful. `LeafOp` is wrapped by `Payload` via a standard lambda function which calls `Adage::GetPayloadData(NodePath*)` to access the `Histos` object in the current multi-dimensional bin specified by the `NodePath` pointer.
 
 
 ## Subloops

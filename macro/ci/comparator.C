@@ -148,7 +148,7 @@ void comparator(
     try { 
       histosArrList.at(0).at(bx).at(by) = H; // first, insert the Histos* of D0
       for(auto De : Dext) { // then insert the Histos* of each DAG in Dext
-        histosArrList.at(++pc).at(bx).at(by) = De->GetHistosExternal(NP);
+        histosArrList.at(++pc).at(bx).at(by) = De->GetPayloadViaID(NP);
       }
     }
     catch(const std::out_of_range &e) { 
